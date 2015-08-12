@@ -16,8 +16,11 @@ You need Python 2.7 (not tested on 3.x).
 Just launch GenAddress_BTC.py or GenAddress_ETH.py in a terminal.
 
 Random source for key generation :
+
 CryptGenRandom in Windows
+
 /dev/urandom   in Unix-like
+
 
 
 Licence :
