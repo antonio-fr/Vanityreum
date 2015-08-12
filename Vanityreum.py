@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # coding=utf8
 
-# Ethereum Address Generation
+# Vanityreum : Ethereum Address Generator
 # Copyright (C) 2015  Antoine FERRON
 #
-# Pure Python basic address generator
+# Pure Python address generator with Vanity capabilities
 #
 # Random source for key generation :
 # CryptGenRandom in Windows
@@ -21,10 +21,14 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>
 #
 # Uses python-sha3 from moshekaplan
-
+#
+# Enter optional argument : a hex string shorter than 11 chars
+#
 from lib.ECDSA_BTC import *
 import hashlib
 import lib.python_sha3
+import re
+import sys
 
 def hashrand(num):
 	#return sha256 of num times 256bits random data
@@ -42,12 +46,31 @@ def randomforkey():
 		candint=int(cand,16)
 	return candint
 
-print "\nGenerate new Ethereum address from random"
+def compute_adr(priv_num):
+	pubkey = Public_key( generator_256, mulG(priv_num) )
+	pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
+	address = lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
+	privkey = Private_key( pubkey, privkeynum )
+	return address
+
+print "\nGenerate new Ethereum address from random or regex/vanity"
+vanity = False
+try:
+	if len(sys.argv) > 1:
+		arg1 = sys.argv[1]
+		assert re.match(r"^[0-9a-fA-F]{1,10}$",arg1) != None
+		searchstring = arg1.lower()
+		vanity = True
+except:
+	raise ValueError("Error in argument, not a hex string or longer than 10 chars")
 load_gtable('lib/G_Table')
 privkeynum = randomforkey()
-pubkey = Public_key( generator_256, mulG(privkeynum) )
-pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
-address = lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
-privkey = Private_key( pubkey, privkeynum )
+address = compute_adr(privkeynum)
+if vanity:
+	print "\nVanity Mode, please Wait ..."
+	while not address.startswith(searchstring):
+		address = compute_adr(privkeynum)
+		privkeynum = privkeynum + 1
+	print "Found!"
 print "\nAddress :  %s \n" % address
 print "PrivKey :  %s" % hexa(privkeynum)
