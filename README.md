@@ -26,7 +26,8 @@ will search for an address starting with "02f"
 And finally saves a "priv.prv" file with the private key.
 
 Then key can be imported in geth:
-    geth import account priv.prv
+
+    geth account import priv.prv
 
 
 Random source for key generation :
