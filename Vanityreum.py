@@ -64,7 +64,7 @@ if __name__ == '__main__':
 	import re
 	import sys
 	import time
-	print "\nGenerate new Ethereum address from random or regex/vanity"
+	print "\nGenerate new Ethereum address from random or vanity (FirstBits)"
 	vanity = False
 	try:
 		if len(sys.argv) > 1:
@@ -83,7 +83,7 @@ if __name__ == '__main__':
 		address = None
 		newprivkeynum = privkeynum
 		print "\nVanity Mode, please Wait ..."
-		print "Press CTRL+C to stop searching (wait few seconds)"
+		print "Press CTRL+C to stop searching"
 		startTime = time.time()
 		try:
 			while address == None:
@@ -104,7 +104,7 @@ if __name__ == '__main__':
 		assert compute_adr(foundprivkeynum) == address
 		print "\nAddress :  %s \n" % address
 		pvhex = hexa(foundprivkeynum)
-		print "PrivKey :  %s" % pvhex
+		print "PrivKey :  %s\n" % pvhex
 		with open('priv.prv', 'wb') as f:
 			f.write(pvhex)
 		print "Private key exported in priv.prv file"
