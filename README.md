@@ -23,6 +23,11 @@ Example:
 
 will search for an address starting with "02f"
 
+And finally saves a "priv.prv" file with the private key.
+
+Then key can be imported in geth:
+    geth import account priv.prv
+
 
 Random source for key generation :
 
@@ -31,7 +36,7 @@ Random source for key generation :
 
 
 You can contribute, sending eth fund to this address:
-afe2418a0d8e44d83a39d8a45b9dbbd12970f361
+afb1f081c0d71f6c76e632b22a99595b5da506e8
 
 
 Licence :
