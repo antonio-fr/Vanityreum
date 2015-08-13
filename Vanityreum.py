@@ -56,9 +56,7 @@ def randomforkey():
 def compute_adr(priv_num):
 	pubkey = Public_key( generator_256, mulG(priv_num) )
 	pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
-	address = lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
-	privkey = Private_key( pubkey, privkeynum )
-	return address
+	return lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
 
 print "\nGenerate new Ethereum address from random or regex/vanity"
 vanity = False
@@ -71,20 +69,30 @@ try:
 except:
 	raise ValueError("Error in argument, not a hex string or longer than 10 chars")
 load_gtable('lib/G_Table')
+listwide=16
 privkeynum = randomforkey()
 address = compute_adr(privkeynum)
+foundprivkeynum = privkeynum
 if vanity:
+	address = None
 	newprivkeynum = privkeynum
 	print "\nVanity Mode, please Wait ..."
 	print "Press CTRL+C to stop searching"
 	startTime = time.time()
 	try:
-		while not address.startswith(searchstring):
-			address = compute_adr(newprivkeynum)
-			newprivkeynum = newprivkeynum + 1
+		while address == None:
+			privkeynumlist = range(newprivkeynum,newprivkeynum+listwide)
+			addresslist = map(compute_adr,privkeynumlist)
+			for index, addressk in enumerate(addresslist, start=0):
+				if addressk.startswith(searchstring):
+					address = addressk
+					foundprivkeynum = privkeynumlist[index]
+			newprivkeynum = newprivkeynum + listwide
 		print "Found!"
 	except KeyboardInterrupt:
 		print "Interrupted, nothing found"
+		inter=1
 	print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n"
-print "\nAddress :  %s \n" % address
-print "PrivKey :  %s" % hexa(privkeynum)
+if 'inter' not in locals():
+	print "\nAddress :  %s \n" % address
+	print "PrivKey :  %s" % hexa(foundprivkeynum)
