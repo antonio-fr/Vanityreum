@@ -5,13 +5,13 @@ Vanityreum is an Ethereum single address wallet generator fully written in pytho
 
 * Pure Python code
 * Cross-platform code
-* No-dependencies
+* very limited dependencies
 * Generate address the easiest way
 
 
 ## Using Vanityreum
 
-You need Python 2.7 (not tested on 3.x).
+You need Python 2.7 (not tested on 3.x), and pysha3. Install this sha3 library here : https://pypi.python.org/pypi/pysha3/#downloads .
 
 Just launch Vanityreum.py to generate a single wallet address.
 
