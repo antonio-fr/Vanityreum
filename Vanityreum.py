@@ -30,6 +30,12 @@ import lib.python_sha3
 import re
 import sys
 
+def hexa(cha):
+	hexas=hex(cha)[2:-1]
+	while len(hexas)<64:
+		hexas="0"+hexas
+	return hexas
+
 def hashrand(num):
 	#return sha256 of num times 256bits random data
 	rng_data=''
