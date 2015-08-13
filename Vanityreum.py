@@ -50,9 +50,12 @@ def randomforkey():
 	return candint
 
 def compute_adr(priv_num):
-	pubkey = Public_key( generator_256, mulG(priv_num) )
-	pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
-	return lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
+	try:
+		pubkey = Public_key( generator_256, mulG(priv_num) )
+		pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
+		return lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
+	except KeyboardInterrupt:
+		return "x"
 
 if __name__ == '__main__':
 	import multiprocessing
@@ -68,11 +71,11 @@ if __name__ == '__main__':
 			arg1 = sys.argv[1]
 			assert re.match(r"^[0-9a-fA-F]{1,10}$",arg1) != None
 			searchstring = arg1.lower()
+			listwide=4*int(multiprocessing.cpu_count())*2**len(searchstring)
 			vanity = True
 	except:
 		raise ValueError("Error in argument, not a hex string or longer than 10 chars")
 	load_gtable('lib/G_Table')
-	listwide=16
 	privkeynum = randomforkey()
 	address = compute_adr(privkeynum)
 	foundprivkeynum = privkeynum
@@ -80,22 +83,24 @@ if __name__ == '__main__':
 		address = None
 		newprivkeynum = privkeynum
 		print "\nVanity Mode, please Wait ..."
-		print "Press CTRL+C to stop searching"
+		print "Press CTRL+C to stop searching (wait few seconds)"
 		startTime = time.time()
 		try:
 			while address == None:
 				privkeynumlist = range(newprivkeynum,newprivkeynum+listwide)
+				newprivkeynum = newprivkeynum + listwide
 				addresslist = p.map(compute_adr,privkeynumlist)
 				for index, addressk in enumerate(addresslist, start=0):
 					if addressk.startswith(searchstring):
 						address = addressk
 						foundprivkeynum = privkeynumlist[index]
-				newprivkeynum = newprivkeynum + listwide
 			print "Found!"
 		except KeyboardInterrupt:
+			p.terminate()
 			print "Interrupted, nothing found"
 			inter=1
 		print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n"
 	if 'inter' not in locals():
+		assert compute_adr(foundprivkeynum) == address
 		print "\nAddress :  %s \n" % address
 		print "PrivKey :  %s" % hexa(foundprivkeynum)
