@@ -43,11 +43,12 @@ def mulG(real):
     dw=16
     while real > 0 :
         dm = real%dw
-	real = real - dm
-	br.append( dm-1 )
+        real = real - dm
+        br.append( dm-1 )
         real = real>>4
     while len(br)<64: br.append(-1)
     kg=INFINITY
+    load_gtable('lib/G_Table')
     for n in range(64):
         if br[n]>=0:
             precomp=gtable[n][br[n]]
@@ -253,7 +254,6 @@ if __name__ == '__main__' :
     import string
     load_gtable('G_Table')
     print "Tests started"
-    
     print "\nDeterministic RFC6979 Checking"
     hmsg= hashlib.sha256(bytearray("Satoshi Nakamoto",'utf8')).hexdigest()
     k = gen_det_k( hmsg, 1 )
