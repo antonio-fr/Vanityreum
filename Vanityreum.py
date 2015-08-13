@@ -29,6 +29,7 @@ import hashlib
 import lib.python_sha3
 import re
 import sys
+import time
 
 def hexa(cha):
 	hexas=hex(cha)[2:-1]
@@ -73,10 +74,13 @@ load_gtable('lib/G_Table')
 privkeynum = randomforkey()
 address = compute_adr(privkeynum)
 if vanity:
+	newprivkeynum = privkeynum
 	print "\nVanity Mode, please Wait ..."
+	startTime = time.time()
 	while not address.startswith(searchstring):
-		address = compute_adr(privkeynum)
-		privkeynum = privkeynum + 1
+		address = compute_adr(newprivkeynum)
+		newprivkeynum = newprivkeynum + 1
 	print "Found!"
+	print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n\n"
 print "\nAddress :  %s \n" % address
 print "PrivKey :  %s" % hexa(privkeynum)
