@@ -97,10 +97,15 @@ if __name__ == '__main__':
 			print "Found!"
 		except KeyboardInterrupt:
 			p.terminate()
-			print "Interrupted, nothing found"
+			print "Interrupted, nothing found\n"
 			inter=1
 		print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n"
 	if 'inter' not in locals():
 		assert compute_adr(foundprivkeynum) == address
 		print "\nAddress :  %s \n" % address
-		print "PrivKey :  %s" % hexa(foundprivkeynum)
+		pvhex = hexa(foundprivkeynum)
+		print "PrivKey :  %s" % pvhex
+		with open('priv.prv', 'wb') as f:
+			f.write(pvhex)
+		print "Private key exported in priv.prv file"
+		print "Can be imported in geth : 'geth account import priv.prv'\n"
