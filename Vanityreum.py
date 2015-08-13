@@ -26,7 +26,7 @@
 #
 from lib.ECDSA_BTC import *
 import hashlib
-import lib.python_sha3
+import sha3
 import re
 import sys
 import time
@@ -56,7 +56,7 @@ def randomforkey():
 def compute_adr(priv_num):
 	pubkey = Public_key( generator_256, mulG(priv_num) )
 	pubkeyhex = (hexa(pubkey.point.x())+hexa(pubkey.point.y())).decode("hex")
-	address = lib.python_sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
+	address = sha3.sha3_256(pubkeyhex).hexdigest()[-40:]
 	privkey = Private_key( pubkey, privkeynum )
 	return address
 
