@@ -58,7 +58,6 @@ if __name__ == '__main__':
 	import multiprocessing
 	p = multiprocessing.Pool(int(multiprocessing.cpu_count()))
 	import hashlib
-	#import lib.python_sha3
 	import re
 	import sys
 	import time
