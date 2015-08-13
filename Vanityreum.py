@@ -76,11 +76,15 @@ address = compute_adr(privkeynum)
 if vanity:
 	newprivkeynum = privkeynum
 	print "\nVanity Mode, please Wait ..."
+	print "Press CTRL+C to stop searching"
 	startTime = time.time()
-	while not address.startswith(searchstring):
-		address = compute_adr(newprivkeynum)
-		newprivkeynum = newprivkeynum + 1
-	print "Found!"
-	print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n\n"
+	try:
+		while not address.startswith(searchstring):
+			address = compute_adr(newprivkeynum)
+			newprivkeynum = newprivkeynum + 1
+		print "Found!"
+	except KeyboardInterrupt:
+		print "Interrupted, nothing found"
+	print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n"
 print "\nAddress :  %s \n" % address
 print "PrivKey :  %s" % hexa(privkeynum)
