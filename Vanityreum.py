@@ -64,6 +64,7 @@ if __name__ == '__main__':
 	import re
 	import sys
 	import time
+	import os.path
 	print "\nGenerate new Ethereum address from random or vanity (FirstBits)"
 	vanity = False
 	try:
@@ -105,7 +106,13 @@ if __name__ == '__main__':
 		print "\nAddress :  %s \n" % address
 		pvhex = hexa(foundprivkeynum)
 		print "PrivKey :  %s\n" % pvhex
-		with open('priv.prv', 'wb') as f:
-			f.write(pvhex)
-		print "Private key exported in priv.prv file"
-		print "Can be imported in geth : 'geth account import priv.prv'\n"
+		privfileexist=False
+		conf="n"
+		if os.path.isfile('priv.prv'):
+			privfileexist=True
+			conf=raw_input("Enter 'y' to confirm overwriting priv.prv file : ")
+		if (conf=="y" or not privfileexist):
+			with open('priv.prv', 'wb') as f:
+				f.write(pvhex)
+			print "Private key exported in priv.prv file"
+			print "Can be imported in geth : 'geth account import priv.prv'\n"
