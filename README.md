@@ -6,7 +6,7 @@ Vanityreum is an Ethereum single address wallet generator fully written in pytho
 * Pure Python code
 * Cross-platform code
 * No-dependencies
-* Generate address the easiest way
+* Generates addresses the easiest way
 
 
 ## Using Vanityreum
@@ -36,11 +36,11 @@ Random source for key generation :
 * /dev/urandom   in Unix-like
 
 
-You can contribute, sending eth fund to this address:
+You can contribute by sending etherum funds to this address:
 afb1f081c0d71f6c76e632b22a99595b5da506e8
 
 
-Licence :
+License :
 ----------
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
