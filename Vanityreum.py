@@ -65,6 +65,7 @@ if __name__ == '__main__':
 	import sys
 	import time
 	import os.path
+	from lib.humtime import humanize_time 
 	print "\nGenerate new Ethereum address from random or vanity (FirstBits)"
 	vanity = False
 	try:
@@ -88,6 +89,7 @@ if __name__ == '__main__':
 		startTime = time.time()
 		try:
 			while address == None:
+				startrunTime = time.time()
 				privkeynumlist = range(newprivkeynum,newprivkeynum+listwide)
 				newprivkeynum = newprivkeynum + listwide
 				addresslist = p.map(compute_adr,privkeynumlist)
@@ -95,12 +97,22 @@ if __name__ == '__main__':
 					if addressk.startswith(searchstring):
 						address = addressk
 						foundprivkeynum = privkeynumlist[index]
+				speed = listwide/(time.time() - startrunTime)
+				estim_time = int((16**len(searchstring))/speed)
+				timespent = int(time.time() - startTime)
+				rem_time = estim_time-timespent
+				if rem_time < 0:
+					rem_time = 0
+				print "Search in Progress .. ","%.1f" %speed, " per second"
+				print "Mean remaining time :", humanize_time(rem_time), "\n"
 			print "Found!"
 		except KeyboardInterrupt:
 			p.terminate()
 			print "Interrupted, nothing found\n"
 			inter=1
-		print "Search Speed : ",(newprivkeynum-privkeynum)/(time.time() - startTime), " per second\n"
+		if 'timespent' in locals():
+			print "Time spent : ", humanize_time(timespent)
+			print "Approx global search speed : ","%.1f" %((newprivkeynum-privkeynum)/timespent), " per second\n"
 	if 'inter' not in locals():
 		assert compute_adr(foundprivkeynum) == address
 		print "\nAddress :  %s \n" % address
